@@ -1,22 +1,18 @@
-# Remote Desktop Controller（远程桌面控制系统）
+# 🖥️ Remote Desktop Controller
 
-这是一个基于 WebSocket 的远程桌面控制系统，包括：
+基于 Python + Node.js 实现的远程桌面控制系统。
 
-- agent.py：被控端，推送屏幕截图并接收控制指令
-- controller.py：控制端，显示远程图像并发出控制命令
-- server.js：Node.js WebSocket 中转服务器
-
-## 项目结构
+## 📁 项目结构
 
 ```
 .
-├── agent.py
-├── controller.py
-├── server.js
+├── agent.py         # 被控端
+├── controller.py    # 控制端
+├── server.js        # WebSocket 中转服务器
 └── README.md
 ```
 
-## 安装依赖
+## 🔧 安装依赖
 
 ### Python（用于 agent 和 controller）
 
@@ -24,68 +20,74 @@
 pip install PyQt5 qasync websockets mss pillow pyautogui
 ```
 
-### Node.js（用于服务器）
+### Node.js（用于 server.js）
 
 ```bash
 npm install ws
 ```
 
-## 启动方式
+## 🚀 启动方式
 
-### 启动 WebSocket 服务器
+### 启动 WebSocket 服务端
 
 ```bash
 node server.js
 ```
 
-### 启动被控端（Agent）
+### 启动被控端（agent.py）
 
 ```bash
 python agent.py
 ```
 
-- 会生成唯一 agent 编号（保存在 APPDATA）
-- 会尝试添加开机启动项
-- 每秒推送 base64 编码的屏幕截图
-- 接收 click、move、key 指令进行控制
+> 会生成唯一 agent 编号（保存在 APPDATA），并推送屏幕截图
 
-### 启动控制端（Controller）
+### 启动控制端（controller.py）
 
 ```bash
 python controller.py
 ```
 
-- 弹窗选择在线 Agent
-- 全屏展示桌面图像
-- 鼠标点击位置同步
-- 键盘输入远程执行
+> 可选择设备并全屏查看远程桌面，支持鼠标点击与键盘控制
 
-## 默认服务器地址
+## 🌐 默认 WebSocket 地址
 
 ```python
 ws://1.94.107.241:6789
 ```
 
-可在 `agent.py` 和 `controller.py` 中自行修改。
+> 如需更换，请修改 `agent.py` 和 `controller.py` 的 `SERVER_URI`
 
-## 注意事项
+## 💡 打包 EXE（可选）
 
-- 如果 PyQt 图像无法显示，请确保配置了正确的插件路径：
-
-```python
-os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = r"你的路径"
-```
-
-- 如果你要生成 EXE，建议使用 `pyinstaller`：
+推荐使用 PyInstaller 打包：
 
 ```bash
 pyinstaller agent.py --noconsole --onefile
 pyinstaller controller.py --noconsole --onefile
 ```
 
-## 开发建议
+## 📝 功能说明
 
-- 支持多客户端同时查看
-- 添加远程文件管理功能
-- 支持双向语音或聊天
+- agent.py：每秒推送屏幕截图，响应 click/move/keyboard 指令
+- controller.py：接收图像流并发送交互指令
+- server.js：中转图像和控制命令，支持多设备选择
 
+## ⚠️ 注意事项
+
+- Windows 平台需配置 QT 插件路径（若遇图像无法显示）：
+
+```python
+os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = r"你的插件路径"
+```
+
+## ✅ 待扩展功能
+
+- 文件传输
+- 多控制端支持
+- 支持双向音视频通话
+- 更稳定的心跳机制和断线重连
+
+---
+
+📌 欢迎 star 或提交 issue 改进本项目！
